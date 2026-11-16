@@ -128,6 +128,21 @@ export default function ProfilePage() {
               onAvatarChange={(newUrl) => setFormData({ ...formData, avatar_url: newUrl })}
             />
 
+            {/* NUEVO: Campo de Nombre de Usuario que faltaba en el formulario */}
+            <div>
+              <label className="text-xs text-slate-400">Nombre de usuario (URL pública)</label>
+              <div className="flex items-center mt-1 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden focus-within:border-blue-500">
+                <span className="pl-3 text-sm text-slate-500">@</span>
+                <input
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().trim() })}
+                  className="w-full p-2.5 bg-transparent text-sm text-white focus:outline-none"
+                  placeholder="tu-usuario"
+                />
+              </div>
+            </div>
+
             {/* Botón para ver la Tarjeta Pública en tiempo real */}
             {formData.username && (
               <div>
