@@ -1,0 +1,15 @@
+{
+  "name": "Youbit",
+  "short_name": "Youbit",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "400x315",
+      "type": "image/png"
+    }
+  ]
+}
