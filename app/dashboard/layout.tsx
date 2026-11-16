@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import BottomNav from '@/components/BottomNav'
-import './globals.css' // O la ruta de estilos que corresponda
+import '../globals.css' // O la ruta de estilos que corresponda
 
 export default function DashboardLayout({
   children,
