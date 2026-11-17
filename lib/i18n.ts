@@ -4,20 +4,18 @@
 export const translations = {
   es: {
     loginTitle: 'Iniciar Sesión',
-    loginSubtitle: 'Para acceder a tu panel de Youbit, introduce tu correo electrónico. Te enviaremos un enlace mágico de acceso instantáneo. Sin contraseñas.',
+    loginSubtitle: 'Accede a tu panel de Youbit de forma rápida y segura.',
     emailLabel: 'Correo electrónico',
     emailPlaceholder: 'tu@correo.com',
-    sendButton: 'Enviar Magic Link',
+    sendButton: 'Continuar con Correo',
     sendingButton: 'Enviando...',
-    passkeyButton: 'Usa tu Passkey (Biometría)',
+    googleButton: 'Continuar con Google',
     orText: 'o',
     navProfile: 'Perfil',
     navScan: 'Escanear QR',
     navBridges: 'Puentes',
     navSettings: 'Ajustes',
-    successMessage: '¡Enlace enviado! Revisa tu bandeja de entrada.',
-    
-    // Textos para tarjeta pública y acciones
+    successMessage: '¡Correo enviado! Revisa tu bandeja de entrada.',
     saveContact: 'Guardar Contacto (.vcf)',
     showQr: 'Mostrar Código QR',
     qrModalTitle: 'Escanea mi tarjeta',
@@ -29,14 +27,12 @@ export const translations = {
     reportReasonInappropriate: 'Contenido inapropiado u ofensivo',
     reportReasonSpam: 'Spam o información falsa',
     reportReasonImpersonation: 'Suplantación de identidad',
-    reportDetailsPlaceholder: 'Detalles adicionales (opcional)...',
+    reportDetailsPlaceholder: 'Detalles adicionales (optional)...',
     reportSubmit: 'Enviar reporte',
     reportSubmitting: 'Enviando...',
     reportSuccess: '¡Reporte enviado con éxito! Gracias por tu colaboración.',
     createYourCardFooter: '¿Quieres tu propia tarjeta digital?',
     createYourCardCTA: 'Crea tu Tarjeta Gratis',
-
-    // Nuevos textos para el Escáner QR por Cámara (RF-06)
     scannerPageTitle: 'Escáner QR & Tarjeta',
     scannerPageSubtitle: 'Apunta con la cámara para escanear contactos o muestra tu código QR inteligente offline-first.',
     scannerBoxText: 'Escanea tarjetas de otros usuarios al instante',
@@ -44,24 +40,22 @@ export const translations = {
     scannerModalTitle: 'Escanear Tarjeta QR',
     scannerModalSubtitle: 'Apunta la cámara hacia el código QR de Youbit',
     scannerErrorCamera: 'No se pudo acceder a la cámara. Verifica los permisos.',
-    scannerSuccess: '¡Perfil detectado! Redirigiendo...'
+    scannerSuccess: '¡Perfil detectado! Redirigiendo...',
   },
   en: {
     loginTitle: 'Sign In',
-    loginSubtitle: 'To access your Youbit dashboard, enter your email address. We will send you an instant magical access link. No passwords.',
+    loginSubtitle: 'Access your Youbit dashboard quickly and securely.',
     emailLabel: 'Email address',
     emailPlaceholder: 'you@email.com',
-    sendButton: 'Send Magic Link',
+    sendButton: 'Continue with Email',
     sendingButton: 'Sending...',
-    passkeyButton: 'Use your Passkey (Biometrics)',
+    googleButton: 'Continue with Google',
     orText: 'OR',
     navProfile: 'Profile',
     navScan: 'Scan QR',
     navBridges: 'Bridges',
     navSettings: 'Settings',
-    successMessage: 'Link sent! Check your inbox.',
-    
-    // Textos para tarjeta pública y acciones
+    successMessage: 'Email sent! Check your inbox.',
     saveContact: 'Save Contact (.vcf)',
     showQr: 'Show QR Code',
     qrModalTitle: 'Scan my card',
@@ -79,8 +73,6 @@ export const translations = {
     reportSuccess: 'Report sent successfully! Thank you for your feedback.',
     createYourCardFooter: 'Want your own digital business card?',
     createYourCardCTA: 'Create Your Free Card',
-
-    // Nuevos textos para el Escáner QR por Cámara (RF-06)
     scannerPageTitle: 'QR Scanner & Card',
     scannerPageSubtitle: 'Point your camera to scan contacts or display your offline-first smart QR code.',
     scannerBoxText: 'Scan other users cards instantly',
@@ -88,7 +80,7 @@ export const translations = {
     scannerModalTitle: 'Scan QR Card',
     scannerModalSubtitle: 'Point your camera at the Youbit QR code',
     scannerErrorCamera: 'Could not access the camera. Please check permissions.',
-    scannerSuccess: 'Profile detected! Redirecting...'
+    scannerSuccess: 'Profile detected! Redirecting...',
   }
 }
 

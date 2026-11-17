@@ -30,3 +30,21 @@ export async function signInWithMagicLink(email: string) {
 
   return { success: true }
 }
+
+export async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    console.warn('Aviso de Google OAuth:', error.message)
+    return {
+      success: false,
+      error: 'No se pudo iniciar sesión con Google. Inténtalo de nuevo.',
+    }
+  }
+  return { success: true }
+}
