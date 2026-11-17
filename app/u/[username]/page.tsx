@@ -9,6 +9,7 @@ import PublicQRModal from '@/components/PublicQRModal'
 import ProfileOptionsMenu from '@/components/ProfileOptionsMenu'
 import { Sparkles } from 'lucide-react'
 import ProfileOfflineSync from '@/components/ProfileOfflineSync'
+import FloatingOwnerEditButton from '@/components/FloatingOwnerEditButton'
 
 // Permitir ruta bloqueante para evitar conflictos con el caché en desarrollo
 export const instant = false
@@ -222,6 +223,9 @@ END:VCARD`
           <span className="text-blue-400 font-semibold">Youbit</span>
         </a>
       </footer>
+
+      {/* Botón flotante inteligente exclusivo para el dueño */}
+      <FloatingOwnerEditButton profileId={profile.id} />
 
     </main>
   )

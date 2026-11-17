@@ -8,8 +8,8 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Si la URL contiene tokens de Supabase (Magic Link / OAuth), 
-    // permitimos que el cliente los procese antes de redirigir.
+    // Si la URL contiene tokens de Supabase (Magic Link / OAuth),
+    // permitimos que el cliente los procese antes de redirigir[cite: 18].
     if (window.location.hash && window.location.hash.includes('access_token')) {
       const timer = setTimeout(() => {
         router.replace('/dashboard')
