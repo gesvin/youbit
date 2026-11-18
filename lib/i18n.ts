@@ -41,6 +41,13 @@ export const translations = {
     scannerModalSubtitle: 'Apunta la cámara hacia el código QR de Youbit',
     scannerErrorCamera: 'No se pudo acceder a la cámara. Verifica los permisos.',
     scannerSuccess: '¡Perfil detectado! Redirigiendo...',
+    // Nuevas claves para Ajustes / Logout
+    settingsTitle: 'Ajustes de la PWA',
+    languageLabel: 'Idioma (i18n)',
+    offlineModeLabel: 'Modo Offline',
+    offlineStatus: 'Activo',
+    logoutButton: 'Cerrar Sesión',
+    logoutSubmitting: 'Cerrando sesión...',
   },
   en: {
     loginTitle: 'Sign In',
@@ -81,6 +88,13 @@ export const translations = {
     scannerModalSubtitle: 'Point your camera at the Youbit QR code',
     scannerErrorCamera: 'Could not access the camera. Please check permissions.',
     scannerSuccess: 'Profile detected! Redirecting...',
+    // Nuevas claves para Ajustes / Logout
+    settingsTitle: 'PWA Settings',
+    languageLabel: 'Language (i18n)',
+    offlineModeLabel: 'Offline Mode',
+    offlineStatus: 'Active',
+    logoutButton: 'Sign Out',
+    logoutSubmitting: 'Signing out...',
   }
 }
 
