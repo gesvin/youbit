@@ -48,6 +48,7 @@ export const translations = {
     offlineStatus: 'Activo',
     logoutButton: 'Cerrar Sesión',
     logoutSubmitting: 'Cerrando sesión...',
+    checkingSession: 'Verificando sesión...',
   },
   en: {
     loginTitle: 'Sign In',
@@ -95,6 +96,7 @@ export const translations = {
     offlineStatus: 'Active',
     logoutButton: 'Sign Out',
     logoutSubmitting: 'Signing out...',
+    checkingSession: 'Checking session...',
   }
 }
 

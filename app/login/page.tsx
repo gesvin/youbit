@@ -5,7 +5,8 @@ import Logo from '@/components/Logo'
 import { signInWithMagicLink, signInWithGoogle } from '@/lib/auth'
 import { translations, getInitialLanguage } from '@/lib/i18n'
 import { Globe } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
 
 function LoginFormContent() {
   const [lang, setLang] = useState<'es' | 'en'>('es')
@@ -14,11 +15,24 @@ function LoginFormContent() {
   const [message, setMessage] = useState('')
   const searchParams = useSearchParams()
   const reason = searchParams.get('reason')
+  const [checkingSession, setCheckingSession] = useState(true)
+  const router = useRouter()
+  const supabase = createClient()
 
   useEffect(() => {
-    const initial = getInitialLanguage()
-    setLang(initial)
-  }, [])
+    async function initAuthAndLang() {
+      const initial = getInitialLanguage()
+      setLang(initial)
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        router.replace('/dashboard')
+      } else {
+        setCheckingSession(false)
+      }
+    }
+    initAuthAndLang()
+  }, [router, supabase])
 
   const toggleLanguage = () => {
     const nextLang = lang === 'es' ? 'en' : 'es'
@@ -27,6 +41,14 @@ function LoginFormContent() {
   }
 
   const t = translations[lang]
+
+  if (checkingSession) {
+    return (
+      <div className="text-slate-400 text-xs text-center">
+        {t.checkingSession}
+      </div>
+    )
+  }
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
