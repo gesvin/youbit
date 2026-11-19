@@ -68,7 +68,7 @@ function LoginFormContent() {
 
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (otpCode.trim().length !== 6) return
+    if (otpCode.trim().length < 6) return
     setLoading(true)
     setMessage('')
 
@@ -191,7 +191,7 @@ function LoginFormContent() {
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                maxLength={6}
+                maxLength={8}
                 value={otpCode}
                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
                 required
@@ -202,7 +202,7 @@ function LoginFormContent() {
 
             <button
               type="submit"
-              disabled={loading || otpCode.length !== 6}
+              disabled={loading || otpCode.length < 6}
               className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl transition shadow-md shadow-blue-500/25 disabled:opacity-50"
             >
               {loading ? t.verifyingOtpButton : t.verifyOtpButton}
