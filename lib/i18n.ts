@@ -41,7 +41,6 @@ export const translations = {
     scannerModalSubtitle: 'Apunta la cámara hacia el código QR de Youbit',
     scannerErrorCamera: 'No se pudo acceder a la cámara. Verifica los permisos.',
     scannerSuccess: '¡Perfil detectado! Redirigiendo...',
-    // Nuevas claves para Ajustes / Logout
     settingsTitle: 'Ajustes de la PWA',
     languageLabel: 'Idioma (i18n)',
     offlineModeLabel: 'Modo Offline',
@@ -49,6 +48,14 @@ export const translations = {
     logoutButton: 'Cerrar Sesión',
     logoutSubmitting: 'Cerrando sesión...',
     checkingSession: 'Verificando sesión...',
+    otpLabel: 'Código de verificación (6 dígitos)',
+    otpPlaceholder: '000000',
+    verifyOtpButton: 'Verificar código',
+    verifyingOtpButton: 'Verificando...',
+    otpSentMessage: 'Hemos enviado un código de 6 dígitos a tu correo.',
+    otpInvalidError: 'Código inválido o expirado. Verifica e inténtalo de nuevo.',
+    changeEmailButton: 'Cambiar correo electrónico',
+    resendCodeButton: 'Reenviar código',
   },
   en: {
     loginTitle: 'Sign In',
@@ -89,7 +96,6 @@ export const translations = {
     scannerModalSubtitle: 'Point your camera at the Youbit QR code',
     scannerErrorCamera: 'Could not access the camera. Please check permissions.',
     scannerSuccess: 'Profile detected! Redirecting...',
-    // Nuevas claves para Ajustes / Logout
     settingsTitle: 'PWA Settings',
     languageLabel: 'Language (i18n)',
     offlineModeLabel: 'Offline Mode',
@@ -97,6 +103,14 @@ export const translations = {
     logoutButton: 'Sign Out',
     logoutSubmitting: 'Signing out...',
     checkingSession: 'Checking session...',
+    otpLabel: 'Verification code (6 digits)',
+    otpPlaceholder: '000000',
+    verifyOtpButton: 'Verify code',
+    verifyingOtpButton: 'Verifying...',
+    otpSentMessage: 'We sent a 6-digit code to your email.',
+    otpInvalidError: 'Invalid or expired code. Please check and try again.',
+    changeEmailButton: 'Change email address',
+    resendCodeButton: 'Resend code',
   }
 }
 

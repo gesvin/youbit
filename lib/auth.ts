@@ -48,3 +48,21 @@ export async function signInWithGoogle() {
   }
   return { success: true }
 }
+
+export async function verifyEmailOtp(email: string, token: string) {
+  const { error } = await supabase.auth.verifyOtp({
+    email,
+    token: token.trim(),
+    type: 'email',
+  })
+
+  if (error) {
+    console.warn('Aviso de verificación OTP:', error.message)
+    return {
+      success: false,
+      error: error.message,
+    }
+  }
+
+  return { success: true }
+}

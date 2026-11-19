@@ -2,7 +2,7 @@
 'use client'
 import { useState, useEffect, Suspense } from 'react'
 import Logo from '@/components/Logo'
-import { signInWithMagicLink, signInWithGoogle } from '@/lib/auth'
+import { signInWithMagicLink, signInWithGoogle, verifyEmailOtp } from '@/lib/auth'
 import { translations, getInitialLanguage } from '@/lib/i18n'
 import { Globe } from 'lucide-react'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -13,6 +13,8 @@ function LoginFormContent() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [step, setStep] = useState<'email' | 'otp'>('email')
+  const [otpCode, setOtpCode] = useState('')
   const searchParams = useSearchParams()
   const reason = searchParams.get('reason')
   const [checkingSession, setCheckingSession] = useState(true)
@@ -58,9 +60,25 @@ function LoginFormContent() {
     if (!res.success) {
       setMessage(res.error || 'Ocurrió un error.')
     } else {
-      setMessage(t.successMessage)
+      setStep('otp')
+      setMessage(t.otpSentMessage)
     }
     setLoading(false)
+  }
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (otpCode.trim().length !== 6) return
+    setLoading(true)
+    setMessage('')
+
+    const res = await verifyEmailOtp(email, otpCode)
+    if (!res.success) {
+      setMessage(t.otpInvalidError)
+      setLoading(false)
+    } else {
+      router.replace('/dashboard')
+    }
   }
 
   const handleGoogleLogin = async () => {
@@ -132,36 +150,87 @@ function LoginFormContent() {
           </span>
         </div>
 
-        {/* Formulario de Correo */}
-        <form onSubmit={handleEmailSubmit} className="space-y-4">
-          <div className="space-y-1">
-            <label className="block text-[11px] font-semibold text-slate-600 px-0.5">
-              {t.emailLabel}
-            </label>
-            <div className="relative">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder={t.emailPlaceholder}
-                className="w-full px-3.5 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                </svg>
+        {/* Formulario de Correo o Código OTP */}
+        {step === 'email' ? (
+          <form onSubmit={handleEmailSubmit} className="space-y-4">
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-slate-600 px-0.5">
+                {t.emailLabel}
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder={t.emailPlaceholder}
+                  className="w-full px-3.5 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl transition shadow-md shadow-blue-500/25 disabled:opacity-50"
-          >
-            {loading ? t.sendingButton : t.sendButton}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl transition shadow-md shadow-blue-500/25 disabled:opacity-50"
+            >
+              {loading ? t.sendingButton : t.sendButton}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleOtpSubmit} className="space-y-4">
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-slate-600 px-0.5">
+                {t.otpLabel}
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={6}
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                required
+                placeholder={t.otpPlaceholder}
+                className="w-full px-3.5 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-center text-base font-bold tracking-[0.4em] text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || otpCode.length !== 6}
+              className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl transition shadow-md shadow-blue-500/25 disabled:opacity-50"
+            >
+              {loading ? t.verifyingOtpButton : t.verifyOtpButton}
+            </button>
+
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('email')
+                  setOtpCode('')
+                  setMessage('')
+                }}
+                className="text-[11px] text-slate-500 hover:text-slate-800 transition"
+              >
+                {t.changeEmailButton}
+              </button>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={handleEmailSubmit}
+                className="text-[11px] font-medium text-blue-600 hover:text-blue-700 transition disabled:opacity-50"
+              >
+                {t.resendCodeButton}
+              </button>
+            </div>
+          </form>
+        )}
 
         {message && (
           <p className="text-[11px] text-center p-2.5 rounded-xl bg-slate-50 text-slate-700 font-medium border border-slate-100">
