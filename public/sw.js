@@ -1,69 +1,100 @@
 const CACHE_NAME = 'youbit-pwa-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/favicon.ico'
-];
+const STATIC_ASSETS = ['/', '/manifest.json', '/favicon.ico'];
 
-// Instalación del Service Worker y caché de recursos estáticos
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
   );
   self.skipWaiting();
 });
 
-// Activación y limpieza de cachés antiguas
 self.addEventListener('activate', (event) => {
-  event.addEventListener('activate', (event) => {
-    event.waitUntil(
-      caches.keys().then((keys) => {
-        return Promise.all(
-          keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-        );
-      })
-    );
-  });
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      )
+    )
+  );
   self.clients.claim();
 });
 
-// Estrategia: Cache-first con fallback a red para peticiones de navegación y assets
 self.addEventListener('fetch', (event) => {
-  // Omitir peticiones que no sean GET o que provengan de Supabase / APIs externas para manejarlas aparte
   if (event.request.method !== 'GET') return;
-  
+
   const url = new URL(event.request.url);
   if (url.origin.includes('supabase.co')) {
-    // Red primero, con respaldo en caché o datos locales para Supabase
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(event.request);
-      })
+      fetch(event.request).catch(() => caches.match(event.request))
     );
     return;
   }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Devolver caché y actualizar en segundo plano (stale-while-revalidate indirecto)
-        fetch(event.request).then((networkResponse) => {
+      const networkFetch = fetch(event.request)
+        .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse);
+              cache.put(event.request, clone);
             });
           }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(event.request).then((networkResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
           return networkResponse;
-        });
-      });
+        })
+        .catch(() => cachedResponse);
+
+      return cachedResponse || networkFetch;
     })
+  );
+});
+
+// Notificaciones push entrantes (Chat Multilingüe / Youbit)
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  let data = {};
+  try {
+    data = event.data.json();
+  } catch {
+    data = { title: 'Youbit', body: event.data.text() };
+  }
+
+  const title = data.title || 'Nuevo mensaje en Youbit';
+  const options = {
+    body: data.body || '',
+    icon: '/logo.png',
+    badge: '/favicon.ico',
+    data: {
+      url: data.url || '/dashboard/apps/multilingual-chat',
+    },
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl =
+    (event.notification.data && event.notification.data.url) ||
+    '/dashboard/apps/multilingual-chat';
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if ('focus' in client) {
+            client.navigate(targetUrl);
+            return client.focus();
+          }
+        }
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(targetUrl);
+        }
+        return undefined;
+      })
   );
 });
