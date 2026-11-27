@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { translations, getInitialLanguage } from '@/lib/i18n'
+import { getChatTranslations } from '@/plugins/multilingual-chat/i18n'
 import {
   PLUGIN_CATEGORIES,
   PLUGINS_REGISTRY,
@@ -178,6 +179,8 @@ export default function AppsPage() {
 
   const t = translations[lang]
 
+  const chatT = getChatTranslations(lang)
+
   const chatRow = userPlugins['multilingual_chat']
   const isChatActive = chatRow?.status === 'active'
 
@@ -233,7 +236,7 @@ export default function AppsPage() {
 
     if (error) {
       setFeedbackType('error')
-      setFeedbackMessage(t.chatConfigErrorMessage)
+      setFeedbackMessage(chatT.chatConfigErrorMessage)
       return
     }
 
@@ -248,7 +251,7 @@ export default function AppsPage() {
     }))
 
     setFeedbackType('success')
-    setFeedbackMessage(t.chatConfigSavedMessage)
+    setFeedbackMessage(chatT.chatConfigSavedMessage)
     setIsChatConfigOpen(false)
   }
 
@@ -401,7 +404,7 @@ export default function AppsPage() {
                         className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-colors cursor-pointer"
                       >
                         <Settings2 className="w-3.5 h-3.5 text-blue-400" />
-                        <span>{t.chatConfigureButton}</span>
+                        <span>{chatT.chatConfigureButton}</span>
                       </button>
                     ) : null}
                   </div>
@@ -479,7 +482,7 @@ export default function AppsPage() {
                                     </h4>
                                     <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
                                       {isPendingConfig
-                                        ? t.chatStatusPendingConfig
+                                        ? chatT.chatStatusPendingConfig
                                         : t.appsAvailableBadge}
                                     </span>
                                   </div>
@@ -495,7 +498,7 @@ export default function AppsPage() {
                                   onClick={openChatConfigModal}
                                   className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition-colors cursor-pointer"
                                 >
-                                  <span>{t.chatActivateAndConfigureButton}</span>
+                                  <span>{chatT.chatActivateAndConfigureButton}</span>
                                 </button>
                               )}
                             </div>
@@ -518,10 +521,10 @@ export default function AppsPage() {
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-white">
-                  {t.chatConfigModalTitle}
+                  {chatT.chatConfigModalTitle}
                 </h3>
                 <p className="text-xs text-slate-400">
-                  {t.chatConfigModalSubtitle}
+                  {chatT.chatConfigModalSubtitle}
                 </p>
               </div>
               <button
@@ -538,7 +541,7 @@ export default function AppsPage() {
               {/* 1. Idioma base */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-medium text-slate-300">
-                  {t.chatBaseLanguageLabel}
+                  {chatT.chatBaseLanguageLabel}
                 </label>
                 <select
                   value={baseLanguage}
@@ -556,7 +559,7 @@ export default function AppsPage() {
               {/* 2. Visibilidad */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-medium text-slate-300">
-                  {t.chatVisibilityLabel}
+                  {chatT.chatVisibilityLabel}
                 </label>
                 <select
                   value={visibility}
@@ -565,16 +568,16 @@ export default function AppsPage() {
                   }
                   className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
                 >
-                  <option value="public">{t.chatVisibilityPublic}</option>
-                  <option value="link_only">{t.chatVisibilityLinkOnly}</option>
-                  <option value="paused">{t.chatVisibilityPaused}</option>
+                  <option value="public">{chatT.chatVisibilityPublic}</option>
+                  <option value="link_only">{chatT.chatVisibilityLinkOnly}</option>
+                  <option value="paused">{chatT.chatVisibilityPaused}</option>
                 </select>
               </div>
 
               {/* Traducción automática */}
               <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/80 border border-slate-800 px-3.5 py-2.5">
                 <span className="text-xs font-medium text-slate-200">
-                  {t.chatAutoTranslateLabel}
+                  {chatT.chatAutoTranslateLabel}
                 </span>
                 <button
                   type="button"
@@ -607,8 +610,8 @@ export default function AppsPage() {
                   className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {savingConfig
-                    ? t.chatSavingConfigButton
-                    : t.chatSaveConfigButton}
+                    ? chatT.chatSavingConfigButton
+                    : chatT.chatSaveConfigButton}
                 </button>
               </div>
             </form>

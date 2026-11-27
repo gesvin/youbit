@@ -10,6 +10,7 @@ import ProfileOptionsMenu from '@/components/ProfileOptionsMenu'
 import { Sparkles } from 'lucide-react'
 import ProfileOfflineSync from '@/components/ProfileOfflineSync'
 import FloatingOwnerEditButton from '@/components/FloatingOwnerEditButton'
+import VisitorChatWidget from '@/plugins/multilingual-chat/VisitorChatWidget'
 
 // Permitir ruta bloqueante para evitar conflictos con el caché en desarrollo
 export const instant = false
@@ -63,6 +64,30 @@ export default async function PublicProfilePage({ params }: PageProps) {
   if (error || !profile || profile.is_active === false) {
     notFound()
   }
+
+  const { data: chatPluginRow } = await supabase
+    .from('user_plugins')
+    .select('status, config')
+    .eq('user_id', profile.id)
+    .eq('plugin_id', 'multilingual_chat')
+    .maybeSingle()
+
+  const chatConfig =
+    chatPluginRow?.config && typeof chatPluginRow.config === 'object'
+      ? (chatPluginRow.config as Record<string, unknown>)
+      : {}
+  const chatVisibility =
+    chatConfig.visibility === 'link_only' ||
+    chatConfig.visibility === 'paused' ||
+    chatConfig.visibility === 'public'
+      ? chatConfig.visibility
+      : 'public'
+  const isPublicChatEnabled =
+    chatPluginRow?.status === 'active' && chatVisibility === 'public'
+  const chatBaseLanguage =
+    typeof chatConfig.base_language === 'string' ? chatConfig.base_language : 'nl'
+  const chatAutoTranslate =
+    typeof chatConfig.auto_translate === 'boolean' ? chatConfig.auto_translate : true
 
   // Generador de contenido vCard (.vcf) en formato string para el Blob
   const vCardData = `BEGIN:VCARD
@@ -137,6 +162,16 @@ END:VCARD`
             {profile.show_whatsapp && profile.phone_whatsapp && (
                 <WhatsAppButton phoneNumber={profile.phone_whatsapp} />
             )}
+
+            {isPublicChatEnabled && (
+                <VisitorChatWidget
+                  ownerUserId={profile.id}
+                  ownerUsername={profile.username}
+                  ownerDisplayName={profile.full_name || profile.username}
+                  ownerLanguage={chatBaseLanguage}
+                  autoTranslate={chatAutoTranslate}
+                />
+              )}
 
             {/* Email Profesional */}
             {profile.email && (
